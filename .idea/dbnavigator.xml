@@ -26,11 +26,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="4952856d-ca0d-4a8d-b933-be22db09cbe0">
-        <schema name="mydbtest" object-types="table, view, procedure, function" />
-        <schema name="performance_schema" object-types="table, view, procedure, function" />
-      </connection>
-      <connection connection-id="e5226db4-3ec5-4545-8e1b-2695395df7ba">
-        <schema name="mydbtest" object-types="table, view, procedure, function" />
+        <schema name="mydbtest" object-types="table, view, procedure, function, constraint, index, column, dataset trigger" />
       </connection>
     </loaded-nodes>
   </component>
