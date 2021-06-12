@@ -1,6 +1,7 @@
 package ru.sfedu.BankApp.controller;
 
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+import ru.sfedu.BankApp.utils.Util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,27 +11,33 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
-public abstract class AbstractController<E, K> {
-    public static final String USER_NAME = "root";
-    public static final String PASSWORD = "root";
-    public static final String URL = "jdbc:mysql://localhost:3306/mydbtest";
+public abstract class AbstractService<E, K> {
 
     private Connection connection;
 
-    public AbstractController() throws SQLException, ClassNotFoundException {
-        connection = getConnection();
+    public AbstractService() throws SQLException, ClassNotFoundException {
+        Util util = new Util();
+        connection = util.getConnection();
     }
 
-    public abstract List<E> getAll();
-    public abstract E update(E entity) throws SQLException;
-    public abstract E getById(K id) throws SQLException;
-    public abstract boolean delete(K id) throws SQLException;
-    public abstract boolean create(E entity) throws SQLException;
+    public AbstractService(Connection connection) throws SQLException, ClassNotFoundException {
+        this.connection = connection;
+    }
 
-    private Connection getConnection() throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+    public abstract Optional<List<E>> getAll();
+    public abstract Optional<E> update(E entity) throws SQLException, ClassNotFoundException;
+    public abstract Optional<E> getById(K id) throws SQLException;
+    public abstract boolean delete(K id) throws SQLException;
+    public abstract boolean create(E entity) throws SQLException, ClassNotFoundException;
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 
     public void initDB() {

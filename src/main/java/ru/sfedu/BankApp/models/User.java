@@ -1,5 +1,6 @@
 package ru.sfedu.BankApp.models;
 
+import java.sql.Connection;
 import java.util.UUID;
 
 public class User {
