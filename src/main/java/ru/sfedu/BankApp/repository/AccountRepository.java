@@ -1,4 +1,4 @@
-package ru.sfedu.BankApp.controller;
+package ru.sfedu.BankApp.repository;
 
 import ru.sfedu.BankApp.models.Account;
 import ru.sfedu.BankApp.models.User;
@@ -11,18 +11,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class AccountService extends AbstractService<Account, String > {
+public class AccountRepository extends AbstractRepository<Account, String > {
 
     public static final String SELECT_ALL_ACCOUNT = "SELECT * FROM ACCOUNT";
     public static final String INSERT_ACCOUNT = "INSERT INTO ACCOUNT VALUES ('%s', '%s', '%s', '%s');";
     public static final String SELECT_ACCOUNT = "SELECT * FROM ACCOUNT WHERE idAccount='%s';";
     public static final String DELETE_ACCOUNT = "DELETE FROM ACCOUNT WHERE idAccount='%s';";
+    public static final String UPDATE_ACCOUNT = "UPDATE ACCOUNT SET number = '%s', balance = '%s', idUser = '%s' WHERE idAccount='%s';";
+    public static UserRepository userService;
 
-    public AccountService() throws SQLException, ClassNotFoundException {
+    public AccountRepository() throws SQLException, ClassNotFoundException {
     }
 
-    public AccountService(Connection connection) throws SQLException, ClassNotFoundException {
+    public AccountRepository(Connection connection) throws SQLException, ClassNotFoundException {
         super(connection);
+        userService = new UserRepository(getConnection());
     }
 
     @Override
@@ -35,7 +38,7 @@ public class AccountService extends AbstractService<Account, String > {
                 Account account = new Account();
                 account.setId(rs.getString(1));
                 account.setNumber(rs.getLong(2));
-                account.setBalance(rs.getLong(3));
+                account.setBalance(rs.getBigDecimal(3));
                 account.setIdUser(rs.getString(4));
                 list.add(account);
             }
@@ -50,11 +53,17 @@ public class AccountService extends AbstractService<Account, String > {
     @Override
     public Optional<Account> update(Account entity) throws SQLException, ClassNotFoundException {
         Optional<Account> account = getById(entity.getId());
-        UserService userService = new UserService(getConnection());
         Optional<User> user = userService.getById(entity.getIdUser());
         if (account.isPresent() && user.isPresent()) {
-            delete(entity.getId());
-            create(entity);
+            PreparedStatement statement = getPrepareStatement(
+                    String.format(
+                            UPDATE_ACCOUNT,
+                            entity.getNumber(),
+                            entity.getBalance(),
+                            entity.getIdUser(),
+                            entity.getId()));
+            statement.executeUpdate();
+            closePrepareStatement(statement);
             return Optional.of(entity);
         } else {
             return Optional.empty();
@@ -69,7 +78,7 @@ public class AccountService extends AbstractService<Account, String > {
         if (rs != null && rs.next()) {
             account.setId(rs.getString(1));
             account.setNumber(rs.getLong(2));
-            account.setBalance(rs.getLong(3));
+            account.setBalance(rs.getBigDecimal(3));
             account.setIdUser(rs.getString(4));
             return Optional.of(account);
         } else {
@@ -93,7 +102,7 @@ public class AccountService extends AbstractService<Account, String > {
     @Override
     public boolean create(Account entity) throws SQLException, ClassNotFoundException {
         Optional<Account> account = getById(entity.getId());
-        UserService userService = new UserService(getConnection());
+        UserRepository userService = new UserRepository(getConnection());
         Optional<User> user = userService.getById(entity.getIdUser());
         if (account.isEmpty() && user.isPresent()) {
             PreparedStatement statement = getPrepareStatement(

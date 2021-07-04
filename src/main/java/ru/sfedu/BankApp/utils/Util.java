@@ -19,11 +19,11 @@ public class Util {
             System.out.println("Connection OK");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            System.out.println("Connection error");
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Connection error");
         }
-
         return connection;
     }
 

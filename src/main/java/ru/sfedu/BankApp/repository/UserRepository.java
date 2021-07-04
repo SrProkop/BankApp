@@ -1,4 +1,4 @@
-package ru.sfedu.BankApp.controller;
+package ru.sfedu.BankApp.repository;
 
 import ru.sfedu.BankApp.models.User;
 
@@ -10,18 +10,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserService extends AbstractService<User, String> {
+public class UserRepository extends AbstractRepository<User, String> {
 
     public static final String SELECT_ALL_USERS = "SELECT * FROM USER";
     public static final String INSERT_USER = "INSERT INTO USER VALUES ('%s', '%s', '%s', '%s', '%s');";
     public static final String SELECT_USER = "SELECT * FROM USER WHERE idUser='%s';";
     public static final String DELETE_USER = "DELETE FROM USER WHERE idUser='%s';";
+    public static final String UPDATE_USER = "UPDATE USER SET firstName = '%s', secondName = '%s', lastName = '%s', sex = '%s' WHERE idUser='%s';";
 
-    public UserService() throws SQLException, ClassNotFoundException {
+    public UserRepository() throws SQLException, ClassNotFoundException {
 
     }
 
-    public UserService(Connection connection) throws SQLException, ClassNotFoundException {
+    public UserRepository(Connection connection) throws SQLException, ClassNotFoundException {
         super(connection);
     }
 
@@ -34,9 +35,9 @@ public class UserService extends AbstractService<User, String> {
             while (rs.next()) {
                 User user = new User();
                 user.setId(rs.getString(1));
-                user.setName(rs.getString(2));
-                user.setSurname(rs.getString(3));
-                user.setPatronymic(rs.getString(4));
+                user.setFirstName(rs.getString(2));
+                user.setSecondName(rs.getString(3));
+                user.setLastName(rs.getString(4));
                 user.setSex(rs.getString(5));
                 list.add(user);
             }
@@ -52,8 +53,16 @@ public class UserService extends AbstractService<User, String> {
     public Optional<User> update(User entity) throws SQLException {
         Optional<User> user = getById(entity.getId());
         if (user.isPresent()) {
-            delete(entity.getId());
-            create(entity);
+            PreparedStatement statement = getPrepareStatement(
+                    String.format(
+                            UPDATE_USER,
+                            entity.getFirstName(),
+                            entity.getSecondName(),
+                            entity.getLastName(),
+                            entity.getSex(),
+                            entity.getId()));
+            statement.executeUpdate();
+            closePrepareStatement(statement);
             return Optional.of(entity);
         } else {
             return Optional.empty();
@@ -67,9 +76,9 @@ public class UserService extends AbstractService<User, String> {
         ResultSet rs = ps.executeQuery();
         if (rs != null && rs.next()) {
             user.setId(rs.getString(1));
-            user.setName(rs.getString(2));
-            user.setSurname(rs.getString(3));
-            user.setPatronymic(rs.getString(4));
+            user.setFirstName(rs.getString(2));
+            user.setSecondName(rs.getString(3));
+            user.setLastName(rs.getString(4));
             user.setSex(rs.getString(5));
             return Optional.of(user);
         } else {
@@ -98,9 +107,9 @@ public class UserService extends AbstractService<User, String> {
                     String.format(
                             INSERT_USER,
                             entity.getId(),
-                            entity.getName(),
-                            entity.getSurname(),
-                            entity.getPatronymic(),
+                            entity.getFirstName(),
+                            entity.getSecondName(),
+                            entity.getLastName(),
                             entity.getSex()));
             statement.executeUpdate();
             closePrepareStatement(statement);

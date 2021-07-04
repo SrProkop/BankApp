@@ -1,28 +1,26 @@
-package ru.sfedu.BankApp.controller;
+package ru.sfedu.BankApp.repository;
 
-import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 import ru.sfedu.BankApp.utils.Util;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractService<E, K> {
+public abstract class AbstractRepository<E, K> {
 
     private Connection connection;
 
-    public AbstractService() throws SQLException, ClassNotFoundException {
+    public AbstractRepository() throws SQLException, ClassNotFoundException {
         Util util = new Util();
         connection = util.getConnection();
     }
 
-    public AbstractService(Connection connection) throws SQLException, ClassNotFoundException {
+    public AbstractRepository(Connection connection) throws SQLException, ClassNotFoundException {
         this.connection = connection;
     }
 

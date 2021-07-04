@@ -1,5 +1,6 @@
 package ru.sfedu.BankApp.models;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class Account {
@@ -8,7 +9,7 @@ public class Account {
 
     }
 
-    public Account(long number, long balance, String idUser) {
+    public Account(long number, BigDecimal balance, String idUser) {
         this.id = UUID.randomUUID().toString();
         this.number = number;
         this.balance = balance;
@@ -17,7 +18,7 @@ public class Account {
 
     private String id;
     private long number;
-    private long balance;
+    private BigDecimal balance;
     private String idUser;
 
     public String getId() {
@@ -36,11 +37,11 @@ public class Account {
         this.number = number;
     }
 
-    public long getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(long balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

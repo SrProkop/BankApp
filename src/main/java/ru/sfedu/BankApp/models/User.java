@@ -9,18 +9,18 @@ public class User {
 
     }
 
-    public User(String name, String surname, String patronymic, String sex) {
+    public User(String firstName, String secondName, String lastName, String sex) {
         this.id = UUID.randomUUID().toString();
-        this.name = name;
-        this.surname = surname;
-        this.patronymic = patronymic;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
         this.sex = sex;
     }
 
     private String id;
-    private String name;
-    private String surname;
-    private String patronymic;
+    private String firstName;
+    private String secondName;
+    private String lastName;
     private String sex;
 
     public String getId() {
@@ -31,28 +31,28 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getSecondName() {
+        return secondName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 
-    public String getPatronymic() {
-        return patronymic;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getSex() {
@@ -66,11 +66,11 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", patronymic='" + patronymic + '\'' +
-                ", sex=" + sex +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", sex='" + sex + '\'' +
                 '}';
     }
 }
