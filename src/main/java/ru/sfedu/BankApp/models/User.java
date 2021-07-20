@@ -1,15 +1,20 @@
 package ru.sfedu.BankApp.models;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.sql.Connection;
 import java.util.UUID;
 
+@Component
+@Scope("prototype")
 public class User {
 
     public User() {
 
     }
 
-    public User(String firstName, String secondName, String lastName, String sex) {
+    public void initInformation(String firstName, String secondName, String lastName, String sex) {
         this.id = UUID.randomUUID().toString();
         this.firstName = firstName;
         this.secondName = secondName;

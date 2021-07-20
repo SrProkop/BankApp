@@ -1,15 +1,21 @@
 package ru.sfedu.BankApp.models;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Component
+@Scope("prototype")
 public class Account {
 
     public Account() {
 
     }
 
-    public Account(long number, BigDecimal balance, String idUser) {
+    public void initInformation(long number, BigDecimal balance, String idUser) {
         this.id = UUID.randomUUID().toString();
         this.number = number;
         this.balance = balance;

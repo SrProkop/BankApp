@@ -1,6 +1,8 @@
 package ru.sfedu.BankApp.repository;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.sfedu.BankApp.models.User;
+import ru.sfedu.BankApp.utils.SpringConfig;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 public class UserRepository extends AbstractRepository<User, String> {
 
+    private AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
     public static final String SELECT_ALL_USERS = "SELECT * FROM USER";
     public static final String INSERT_USER = "INSERT INTO USER VALUES ('%s', '%s', '%s', '%s', '%s');";
     public static final String SELECT_USER = "SELECT * FROM USER WHERE idUser='%s';";
@@ -33,7 +36,7 @@ public class UserRepository extends AbstractRepository<User, String> {
         try {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                User user = new User();
+                User user = context.getBean("user", User.class);
                 user.setId(rs.getString(1));
                 user.setFirstName(rs.getString(2));
                 user.setSecondName(rs.getString(3));
@@ -72,7 +75,7 @@ public class UserRepository extends AbstractRepository<User, String> {
     @Override
     public Optional<User> getById(String id) throws SQLException {
         PreparedStatement ps = getPrepareStatement(String.format(SELECT_USER, id));
-        User user = new User();
+        User user = context.getBean("user", User.class);
         ResultSet rs = ps.executeQuery();
         if (rs != null && rs.next()) {
             user.setId(rs.getString(1));

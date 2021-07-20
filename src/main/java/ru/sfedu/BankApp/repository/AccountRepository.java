@@ -1,7 +1,9 @@
 package ru.sfedu.BankApp.repository;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.sfedu.BankApp.models.Account;
 import ru.sfedu.BankApp.models.User;
+import ru.sfedu.BankApp.utils.SpringConfig;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +15,7 @@ import java.util.Optional;
 
 public class AccountRepository extends AbstractRepository<Account, String > {
 
+    private AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
     public static final String SELECT_ALL_ACCOUNT = "SELECT * FROM ACCOUNT";
     public static final String INSERT_ACCOUNT = "INSERT INTO ACCOUNT VALUES ('%s', '%s', '%s', '%s');";
     public static final String SELECT_ACCOUNT = "SELECT * FROM ACCOUNT WHERE idAccount='%s';";
@@ -35,7 +38,7 @@ public class AccountRepository extends AbstractRepository<Account, String > {
         try {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Account account = new Account();
+                Account account = context.getBean("account", Account.class);
                 account.setId(rs.getString(1));
                 account.setNumber(rs.getLong(2));
                 account.setBalance(rs.getBigDecimal(3));
@@ -73,7 +76,7 @@ public class AccountRepository extends AbstractRepository<Account, String > {
     @Override
     public Optional<Account> getById(String id) throws SQLException {
         PreparedStatement ps = getPrepareStatement(String.format(SELECT_ACCOUNT, id));
-        Account account = new Account();
+        Account account = context.getBean("account", Account.class);
         ResultSet rs = ps.executeQuery();
         if (rs != null && rs.next()) {
             account.setId(rs.getString(1));
