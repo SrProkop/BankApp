@@ -14,13 +14,12 @@ import java.sql.*;
 public class Main {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        Connection connection = new Util().getConnection();
-        UserRepository userService = new UserRepository(connection);
-        AccountRepository accountService = new AccountRepository(connection);
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+        UserRepository userService = context.getBean("userRepository", UserRepository.class);
+        AccountRepository accountService = context.getBean("accountRepository", AccountRepository.class);
         System.out.println(userService.getAll());
-        User user = context.getBean("user", User.class);
-        User user1 = context.getBean("user", User.class);
+        User user = new User();
+        User user1 = new User();
         user.initInformation("Константин1", "Константинович1", "Константинов1", "м");
         user1.initInformation("Константин2", "Константинович2", "Константинов2", "м");
         userService.create(user);

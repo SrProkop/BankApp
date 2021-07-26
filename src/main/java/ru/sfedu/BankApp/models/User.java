@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 import java.sql.Connection;
 import java.util.UUID;
 
-@Component
-@Scope("prototype")
 public class User {
 
     public User() {

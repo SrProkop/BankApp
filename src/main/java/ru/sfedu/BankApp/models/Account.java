@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Component
-@Scope("prototype")
 public class Account {
 
     public Account() {

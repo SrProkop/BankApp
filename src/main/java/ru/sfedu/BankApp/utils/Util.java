@@ -10,8 +10,17 @@ public class Util {
     private static final String USER_NAME = "root";
     private static final String PASSWORD = "root";
     private static final String URL = "jdbc:mysql://localhost:3306/mydbtest";
+    private static Connection connection;
 
-    public Connection getConnection() throws SQLException, ClassNotFoundException {
+    public Util() throws SQLException, ClassNotFoundException {
+        connection = createConnection();
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public static Connection createConnection() throws SQLException, ClassNotFoundException {
         Connection connection = null;
         try {
             Class.forName(DRIVER);
